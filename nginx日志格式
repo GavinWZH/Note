@@ -1,0 +1,264 @@
+nginx日志格式:
+%remote_addr - %remote_user [%time_local] "%request" %status %body_bytes_sent "%http_referer" "%http_user_agent" "%http_x_forwarded_for"
+
+logstash 对应的规则
+WZ ([^ ]*) 
+NGINX %{IP:remote_ip} \- \- \[%{HTTPDATE:timestamp}\] "%{WORD:method} %{WZ:request} HTTP/%{NUMBER:httpversion}" %{NUMBER:status} %{NUMBER:bytes} %{QS:referer} %{QS:agent} %{QS:xforward}
+
+
+192.168.0.149 - - [02/Nov/2018:19:16:36 +0800] "GET /authentication/device_request/ HTTP/1.1" 200 49 "http://192.168.0.173:8000/index.html" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
+
+
+
+
+
+
+input {
+    file {
+        path => "/home/palmx/projects/palmx/data/log/nginx_*.log"
+        start_position => "beginning"
+        sincedb_path => "/dev/null"
+    }
+}
+
+filter {
+    if [path] =~ "access" {
+        grok {
+            match => { "message" => "%{COMBINEDAPACHELOG}" }
+        }
+        mutate { 
+        	replace => { "type" => "nginx_access" } 
+        }
+    } else if [path] =~ "error" {
+        grok {
+        	match => { "message" => "(?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \[%{LOGLEVEL:log_level}\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: (?<clientip>%{IP}|%{HOSTNAME}))(?:, server: (?<server>%{IPORHOST}|%{WORD}))(?:, request: %{QS:request})?(?:, upstream: (?<upstream>\"%{URI}\"|%{QS}))?(?:, host: %{QS:request_host})?(?:, referrer: \"%{URI:referrer}\")?"}
+        }
+        mutate { 
+        	replace => { "type" => "nginx_error" } 
+        }
+    }
+    date {
+    	match => [ "timestamp" , "dd/MM/yyyy:HH:mm:ss Z" ]
+	}
+}
+
+output {
+    elasticsearch {
+        hosts => ["localhost:9200"]
+    }
+    stdout { codec => rubydebug }
+}
+
+
+
+
+
+
+
+
+heartbeat.monitors:
+  
+- type: icmp
+
+  hosts: ["192.168.0.173","192.168.0.149","192.168.0.142"]
+
+  schedule: "@every 60s" 
+
+
+setup.template.settings: 
+
+  index.number_of_shards: 1
+
+  index.codec: best_compression
+
+
+setup.template.name: "heartbeat"
+
+setup.template.pattern: "heartbeat*"
+
+
+output.logstash:
+
+  hosts: ["localhost:5044"]
+
+
+
+
+
+input {
+    beats {
+        port => 5044
+    }
+}
+
+filter {
+    if [@metadata][beat] == "heartbeat" {
+            if [monitor][status] == "up" {
+                    mutate {
+                        replace => {
+                            "[monitor][status]" => 1
+                        }
+                    }
+            } else if [monitor][status] == "down" {
+                mutate {
+                        replace => {
+                            "[monitor][status]" => 0
+                        }
+                    }
+            }
+    }
+    if [@metadata][beat] == "metricbeat" {
+        mutate {
+        	update => { "[beat][name]" => "%{[@metadata][ip_address]}" }
+        }
+    } else if [@metadata][beat] == "heartbeat" {
+    	mutate { 
+        	remove_field => [ "beat", "type", "tags", "[host][name]", "[monitor][name]", "[monitor][duration][us]","[monitor][id]", "[monitor][type]"]
+        }
+    }
+}
+
+output {
+	elasticsearch {
+	        hosts => ["localhost:9200"]
+	        index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+    }
+    stdout { codec => rubydebug }
+}
+
+
+        
+
+
+
+
+metricbeat.config.modules:
+
+  path: ${path.config}/modules.d/*.yml
+
+  reload.enabled: false
+
+  reload.period: 10s
+
+setup.template.settings:
+
+  index.number_of_shards: 1
+
+  index.codec: best_compression
+
+output.logstash:
+
+  hosts: ["localhost:5044"]
+
+告警
+配置：
+	# 规则文件夹名字
+	rules_folder: example_rules
+
+	# 运行间隔
+	run_every:
+	  minutes: 1
+
+	# 每次监控的时间段
+	buffer_time:
+	  minitues: 2
+
+	# elastsearch_host
+	es_host: 192.168.0.173
+
+	# elastsearch_port
+	es_port 9200
+
+	# 反馈写入的索引
+	writeback_index: elastalert_status
+
+	# 重试次数
+	alert_time_limit:
+	  days: 2
+
+心跳：
+	监控内容：
+		minitor.status:0 表示不在线，发起警告。
+	规则类型：
+		change
+		配置文件：example_change.yaml。
+		change：此规则将监视某个字段并匹配该字段是否发生更改。字段必须与上次事件相同。
+		query_key：监控字段。
+		这个规则需要三个附加选项：
+		compare_key：要监视的字段的名称进行更改。由于这是一个字符串列表，所以我们可以有多个键。如果任何字段发生变化，则会触发警报。
+		ignore_null：如果为true，则没有compare_key字段的事件将不会计数为更改。当前，这将检查compare_key中的所有字段。
+		query_key：此规则适用于每个query_key基础。此字段必须出现在所有已检查的事件中。
+		还有一个可选字段：
+		timeframe：更改之间的最长时间。在这段时间之后，ElastAlert将忘记该compare_key字段的旧值。
+	告警方式：
+		邮箱。
+
+	规则配置：
+		# 告警的名称
+		name: heartbeat-monitor
+
+		# 告警类型：有改变就告警
+		type: change
+
+		# 监控的索引
+		index: heartbeat-*
+
+		# 监控的字段
+		compare_key: monitor.status
+		
+		# 是否忽略空值
+		ignore_null: true
+
+		# 变化对比的前提
+		query_key: monitor.ip
+
+		# 监控对比时间
+		timeframe:
+			minitues: 1
+
+		# 告警方式
+		alert:
+		- "email"
+
+		# 目标邮件列表
+		email
+		- "13710999513@163.com"
+
+		# 邮箱代理host
+		smtp_host: smtp.qq.com
+
+		# 邮箱代理端口
+		smtp_port: 465
+
+		# 使用tls链接smtp主机
+		smtp_ssl: true
+
+		# 账号配置文件路径
+		smtp_auth_file: /home/palmx/elastalert/example_rules/smtp_auth_file.yaml
+
+		# 邮件回复
+		#email_reply_to: 2450741440@qq.com
+
+		# 发送邮件账号
+		from_addr: 2450741440@qq.com
+
+	账号配置：
+	    user: "2450741440@qq.com"
+
+	    password: "kjravgyffxwwdhji"
+
+服务器性能：
+	CPU使用率： CPU Usage Gauge
+		百分比
+	内存使用率： Memory Usage Gauge
+		百分比
+	硬盘使用率： Disk Used
+		百分比
+	过去1分钟负载：Load Gauge
+		小数
+	
+
+
+./metricbeat -c ./metricbeat.yml -path.home ~/metricbeat -path.config ~/metricbeat -path.data ~/metricbeat -path.logs ~/metricbeat
+
+curl -O http://192.168.0.204:8000/media/attachment/feature-0-9999.zip

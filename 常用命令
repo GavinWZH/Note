@@ -1,0 +1,616 @@
+#查看终端机ip 使用adb
+adb shell
+
+# linux 清理缓存
+sudo -i
+
+echo 1 > /proc/sys/vm/drop_caches
+
+echo 2 > /proc/sys/vm/drop_caches
+
+echo 3 > /proc/sys/vm/drop_cachesls
+
+exit
+
+
+# go编译
+vim ~/.bashrc
+
+echo -e "export GOPATH=$HOME/go" >> ~/.bashrc
+
+mkdir -p ${GOPATH}/src/github.com/elastic
+
+cd ${GOPATH}/src/github.com/elastic
+
+git clone https://github.com/elastic/beats.git
+
+cd beats/filebeat
+
+env GOOS=linux GOARCH=arm64 go build
+
+
+sudo -i
+echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo performance > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+exit
+cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+
+
+
+# 查看当前文件夹的文件数
+ls -l |grep "^-"|wc -l
+
+# 修改mysql密码
+mysqladmin -uroot -proot password root@me1ux
+
+
+# 励宏连204服务器
+172.16.0.204
+
+# 端口号占用
+netstat -anp | grep 端口号
+
+# apt 解锁
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock-frontend
+sudo dpkg --configure -a
+sudo apt-get install -f
+
+# 重置数据表
+truncate table user_permission;
+truncate table user_role;
+truncate table user_rolepermission;
+truncate table user_group;
+truncate table user_grouppermission;
+truncate table user_userrole;
+
+
+# docker
+# 下载镜像
+sudo docker pull 镜像名字
+# 创建镜像并运行进入
+sudo docker run -ti ubuntu
+# 查看所有镜像
+sudo docker images
+# 查看镜像详细信息
+sudo docker inspect 镜像ID
+# 搜索镜像
+sudo docker search 镜像名字
+# 删除镜像
+sudo docker rmi 镜像名字/ID/标签
+# 删除容器
+sudo docker rm 容器名字/ID
+# 删除顺序 先容器后镜像
+# 创建镜像
+sudo docker commit -m '容器信息' -a '容器作者' 容器ID 新建镜像名字
+# 导出镜像
+sudo docker save -o 镜像包名字.tar 镜像
+# 导入镜像
+sudo docker load < 镜像包.tar
+
+
+# 安装python3虚拟环境
+sudo pip3 install virtualenv virtualenvwrapper
+mkdir $HOME/.virtualenvs
+echo "export WORKON_HOME=$HOME/.virtualenvs" | sudo tee -a $HOME/.bashrc
+echo "source /usr/local/bin/virtualenvwrapper.sh" | sudo tee -a $HOME/.bashr
+source $HOME/.bashrc
+# 创建python3虚拟环境
+mkvirtualenv -p python3 虚拟环境名字
+# 使用python3虚拟环境
+workon 虚拟环境名字
+# 退出虚拟环境
+deactivate
+# 删除虚拟环境
+rmvirtualenv 虚拟环境名字
+
+
+curl -X POST "http://localhost:5601/api/saved_objects/_bulk_create" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d @dashboards.json
+
+sudo apt install -y openjdk-8-jre apt-transport-https python2.7 python-pip gcc libffi-dev python-dev libssl-dev apache2-utils nginx
+
+curl -X POST "http://localhost:5601/api/saved_objects/_bulk_create" -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d@/vagrant/index.json
+
+
+[
+{"type": "index-pattern", "id": "heartbeat-*", "attributes": {"title": "heartbeat-*"}},
+{"type": "index-pattern", "id": "metricbeat-*", "attributes": {"title": "metricbeat-*"}},
+{"type": "index-pattern", "id": "elastalert-*", "attributes": {"title": "elastalert-*"}},
+{"type": "index-pattern", "id": "apm-*", "attributes": {"title": "apm-*"}},
+]
+
+
+curl -XPOST http://192.168.0.88:8008/private/internal_command/ -d 'command=RESET_FACTORY_SETTINGS'
+curl -XPOST http://192.168.0.88:8008/private/internal_command/ -d 'command=REMOVE_USER&args=1,2,3'
+curl -XPOST http://192.168.0.88:8888/private/internal_command/ -d 'command=REMOVE_USER&args=1,2,3'
+curl -XPOST http://localhost:8008/private/internal_command/ -d 'command=REMOVE_USER&args=1'
+
+
+export LANGUAGE="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+
+sudo apt install -y language-pack-en*
+sudo sed -i "s#\# en_US.UTF-8 UTF-8#en_US.UTF-8 UTF-8#" /etc/locale.gen
+sudo locale-gen
+export LANG="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export LC_NUMERIC="en_US.UTF-8"
+export LC_TIME="en_US.UTF-8"
+export LC_COLLATE="en_US.UTF-8"
+export LC_MONETARY="en_US.UTF-8"
+export LC_MESSAGES="en_US.UTF-8"
+export LC_PAPER="en_US.UTF-8"
+export LC_NAME="en_US.UTF-8"
+export LC_ADDRESS="en_US.UTF-8"
+export LC_TELEPHONE="en_US.UTF-8"
+export LC_MEASUREMENT="en_US.UTF-8"
+export LC_IDENTIFICATION="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+
+cd /usr/share/locales/
+./install-language-pack en_US
+
+python3 mbp.py -s 'melux:123456@127.0.0.1' -t sys > sys.log
+
+
+cd /usr/share/locales/
+sudo ./install-language-pack en_US
+
+echo "nameserver 114.114.114.114" | sudo tee /etc/resolv.conf
+sudo apt install -y language-pack-en*
+sudo sed -i "s#\# en_US.UTF-8 UTF-8#en_US.UTF-8 UTF-8#" /etc/locale.gen
+sudo locale-gen
+
+export LANG="en_US.utf8"
+export LC_CTYPE="en_US.utf8"
+export LC_NUMERIC="en_US.utf8"
+export LC_TIME="en_US.utf8"
+export LC_COLLATE="en_US.utf8"
+export LC_MONETARY="en_US.utf8"
+export LC_MESSAGES="en_US.utf8"
+export LC_PAPER="en_US.utf8"
+export LC_NAME="en_US.utf8"
+export LC_ADDRESS="en_US.utf8"
+export LC_TELEPHONE="en_US.utf8"
+export LC_MEASUREMENT="en_US.utf8"
+export LC_IDENTIFICATION="en_US.utf8"
+export LANGUAGE="en_US.utf8"
+export LANGUAGE="en_US.utf8"
+export LANG="en_US.utf8"
+export LC_ALL="en_US.utf8"
+source /etc/profile
+
+use mysql;
+update user set plugin='mysql_native_password' where User='root';
+update user set authentication_string=password('root@me1ux') where user='root' and host='localhost';
+
+
+svn 
+wuzh
+wuzh@#2018
+
+
+# 内部命令
+curl -XPOST http://localhost:8008/private/internal_command/ -d 'command=REMOVE_USER'
+
+# rk3399 释放硬盘空间
+sudo resize2fs /dev/mmcblk1p8
+
+# x64 rpc环境
+export LD_LIBRARY_PATH=/usr/local/lib/melux/airwave-2.0/build/lib/x64/:/usr/local/lib/melux/opencv-2.4.13/lib/:/usr/local/lib/melux/fftw-3.3.7/lib/:/usr/local/lib/melux/sqlite_amalgamation_3250300/:/usr/local/lib/melux/mysql_connector_cpp_8_0/lib64/:/usr/local/lib/melux/curl_7_64_1/lib/:/usr/local/lib/melux/grpc_1_18/lib/:/usr/local/lib/melux/openssl_1_1_1b/lib/
+
+export LD_LIBRARY_PATH=/usr/local/lib/melux/airwave-2.0/build/lib/x64/:/usr/local/lib/melux/opencv-2.4.13/lib/:/usr/local/lib/melux/fftw-3.3.7/lib/
+
+# arm源
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial main
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial main
+
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial-updates main
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial-updates main
+
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial universe
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial-updates universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial-updates universe
+
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial-security main
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial-security main
+deb http://mirrors.aliyun.com/ubuntu-ports/ xenial-security universe
+deb-src http://mirrors.aliyun.com/ubuntu-ports/ xenial-security universe
+
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+
+
+
+# windows
+windows kill 进程
+
+netstat -ano | findstr 端口
+tskill 进程id
+
+
+# 删除某个进程
+ps aux | grep product | awk '{print $2}' | xargs kill -9
+
+
+bin/kafka-topics.sh -create --zookeeper 192.168.33.5:2181,192.168.33.6:2181,192.168.33.7:2181 -replication-factor 3 --partitions 3 --topic kandy
+
+bin/kafka-server-start.sh config/server.properties &
+
+
+# 数据库创建用户
+grant select on *.* to 'test'@'%' identified by 'test';
+flush privileges;
+select * from mysql.user\G
+
+
+change master to master_host='192.168.33.8',master_user='repl',master_password='repl@me1ux',master_log_file='mysql-bin.000008',master_log_pos=194;
+start slave;
+show slave status\G
+
+
+
+#linux ssr
+wget http://www.djangoz.com/ssr
+sudo mv ssr /usr/local/bin
+sudo chmod 766 /usr/local/bin/ssr
+ssr install
+ssr config
+sudo apt-get install -y privoxy
+echo 'forward-socks5t   /               127.0.0.1:1080 .' | sudo tee /etc/privoxy/config
+
+start
+sudo /etc/init.d/privoxy restart
+export http_proxy="127.0.0.1:8118"
+export https_proxy="127.0.0.1:8118"
+
+
+stop
+sudo /etc/init.d/privoxy stop
+unset http_proxy
+unset https_proxy
+
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+
+curl '127.0.0.1:9200/_cat/indices?v'
+
+
+mysqldump -uroot -p cafeteria_repl --events --routines --triggers --complete-insert --ignore-table=cafeteria_repl.authentication_handminutiae --ignore-table=cafeteria_repl.authentication_faceminutiae > mysql.sql
+mysqldump -uroot -p cafeteria_repl --events --routines --triggers --complete-insert > mysql.sql
+
+echo "melux@#GZLGzf!" | sudo mkdir /home/palmx/1121/
+
+
+sudo mv /home/palmx/1121/ /home/melux/projects/cafeteria_repl_migration/
+sudo chown melux:melux /home/melux/projects/cafeteria_repl_migration/* -R
+cd /home/melux/projects/cafeteria_repl_migration/1121
+python3 /home/melux/projects/cafeteria_repl/web/manage.py scheduled_task
+
+python3 deploy.py -s 'melux:melux@#GZLGzf!@10.225.0.202' -t code -cr master -p cafeteria_repl_KAI_YUE.tar.gz
+python3 deploy.py -s 'melux:melux@#GZLGzf!@10.225.1.117' -t code -cr slave -p cafeteria_repl_KAI_DA.tar.gz
+python3 deploy.py -s 'melux:melux#Gzjyz$@10.225.1.218' -t code -cr slave -p cafeteria_repl_JIA_YA_ZHAN.tar.gz
+python3 deploy.py -s 'melux:melux@#gzZSC&&@10.225.1.228' -t code -cr slave -p cafeteria_repl_ZHI_SHI_CHENG.tar.gz
+python3 deploy.py -s 'melux:GZgkstmelux!@10.225.2.187' -t code -cr slave -p cafeteria_repl_GUANG_KEN.tar.gz
+
+mysql -uroot -proot@me1ux -e "reset master"
+mysql -uroot -proot@me1ux cafeteria_repl < ~/mysql.sql
+
+
+export LD_LIBRARY_PATH=/usr/local/lib/melux/airwave-2.0/build/lib/rk3399/:/usr/local/lib/melux/opencv-2.4.13/lib/:/usr/local/lib/melux/fftw-3.3.7/lib/:/usr/local/lib/melux/sqlite_amalgamation_3250300/:/usr/local/lib/melux/mysql_connector_cpp_8_0/lib64/:/usr/local/lib/melux/curl_7_64_1/lib/:/usr/local/lib/melux/grpc_1_18/lib/:/usr/local/lib/melux/openssl_1_1_1b/lib/
+
+
+
+curl -XPOST http://localhost:8008/private/internal_command/ -d 'command=REMOVE_USER&args=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,26,27'
+
+
+mysql -uroot -p -D cafeteria_repl -e 'select ss.id,ss.name,od.full_name from staff_staff ss inner join org_department od on ss.department_id=od.id;' > staff.log
+
+sudo sed -i "s/x64/rk3399/g"
+
+python3 deploy.py -s 'melux:123456@127.0.0.1' -t algo proj code -a rk3399
+
+
+# 路由
+sudo route add default gw 192.168.0.1
+
+
+# python3 调用c++库
+# https://www.jianshu.com/p/ccd239bd11d9
+
+1、前提准备：
+    C++文件包括：cpp,h
+    python3 3.5.2
+    swig 3.0.8
+
+2、编写.i接口文件
+
+%module feature_extraction
+
+%{
+#define SWIG_FILE_WITH_INIT
+#include "feature_extraction.h"
+%}
+std::map<int, FeatureVeinSet> featureExtracion(std::map<int, std::string> inPath);
+void testFeatureExtracion();
+
+最后一行声明封装的函数和变量
+
+3、产生python模块
+c: swig -python feature_extraction.i
+c++: swig -c++ -python feature_extraction.i 
+
+生成文件：xxx_wrap.cxx、xxx.py
+
+4、编译文件
+g++ -std=c++11 -g2 -fopenmp -Wall -fPIC -shared feature_extraction.cpp feature_extraction.h find_file.cpp find_file.h -o server -I/usr/local/lib/melux/airwave-2.0/build/include/common/log/ -I/usr/local/lib/melux/airwave-2.0/build/include/algorithm/common/ -I/usr/local/lib/melux/airwave-2.0/build/include/algorithm/ -L/usr/local/lib/melux/airwave-2.0/build/lib/x64/ -lMeluxCommon -lAlgorithm -lMeluxPalm -lMeluxFace -lLog  -I/usr/local/lib/melux/opencv-2.4.13/include/ -L/usr/local/lib/melux/opencv-2.4.13/lib/ -lopencv_calib3d -lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann -lopencv_gpu -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_ocl -lopencv_photo -lopencv_stitching -lopencv_superres -lopencv_ts -lopencv_video -lopencv_videostab -lrt -lpthread -lm -ldl -I/usr/local/lib/melux/fftw-3.3.7/include/ -L/usr/local/lib/melux/fftw-3.3.7/lib/ -lfftw3f -I/usr/local/lib/melux/easyloggingpp_9_96_7/ -lpthread -DELPP_THREAD_SAFE -DELPP_NO_DEFAULT_LOG_FILE -I/usr/local/lib/melux/rapidjson_1_1_0/include/ -I/usr/local/lib/melux/sqlite_amalgamation_3250300/ -L/usr/local/lib/melux/sqlite_amalgamation_3250300/ -lsqlite3 -I/usr/local/lib/melux/mysql_connector_cpp_8_0/include/ -L/usr/local/lib/melux/mysql_connector_cpp_8_0/lib64/ -lmysqlcppconn -I/usr/local/lib/melux/boost_1_68_0/ -I/usr/local/哦lib/melux/curl_7_64_1/include/ -L/usr/local/lib/melux/curl_7_64_1/lib/ -lcurl -I/usr/local/lib/melux/grpc_1_18/include/ -L/usr/local/lib/melux/grpc_1_18/lib/ -lprotobuf -pthread -lgrpc++ -lgrpc -I/usr/local/lib/melux/openssl_1_1_1b/include/ -L/usr/local/lib/melux/openssl_1_1_1b/lib/ -lssl -lcrypto
+
+
+5、测试
+import feature_extraction
+
+
+g++ -std=c++11 -g2 -fopenmp -Wall feature_extraction.cpp feature_extraction.h find_file.cpp find_file.h -o server -I/usr/local/lib/melux/airwave-2.0/build/include/common/log/ -I/usr/local/lib/melux/airwave-2.0/build/include/algorithm/common/ -I/usr/local/lib/melux/airwave-2.0/build/include/algorithm/ -L/usr/local/lib/melux/airwave-2.0/build/lib/x64/ -lMeluxCommon -lAlgorithm -lMeluxPalm -lMeluxFace -lLog  -I/usr/local/lib/melux/opencv-2.4.13/include/ -L/usr/local/lib/melux/opencv-2.4.13/lib/ -lopencv_calib3d -lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann -lopencv_gpu -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_ocl -lopencv_photo -lopencv_stitching -lopencv_superres -lopencv_ts -lopencv_video -lopencv_videostab -lrt -lpthread -lm -ldl
+
+
+# mysql主从冲突处理
+mysqlbinlog --no-defaults --base64-output=decode-rows -v -v /data/mysql/mysql_data/mysql-bin.000120 | grep -A 200 '601904405' > 123.log
+stop slave;
+start slave;
+show slave status\G
+过程：查看冲突地方 mysql-bin.000120 和标记点 601904405
+    例如 delete操作改insert操作，然后重启同步
+@1、@2、@3代表字段名称
+
+delete from
+
+curl http://10.0.0.236:8008/record/query/?record_id=
+curl http://10.0.0.236:8008/user/query/?id=
+curl -POST http://10.0.0.236:8008/user/update/ -d "id=&status=1"
+curl -POST http://10.0.0.236:8008/user/update/ -d "id=&status=0"
+
+
+var device = Device.getMain();
+for (i = 0; i < 100; i++) { 
+    device.click(1000,1150,sigmaConst.STATE_PRESS);
+    delay(5000);
+};
+print('finish');
+
+
+insert device_device (type,number,name,mac,remark,status) values
+('REGISTER_CLIENT','946F011946000151 ', '注册机1号', '00:E2:DC:00:00:22','',''),
+('REGISTER_CLIENT','805101902000023 ', '注册机2号', '00:E2:DC:00:00:23','',''),
+('REGISTER_CLIENT','8758041931000129', '注册机3号', '00:E2:DC:00:01:29','',''),
+('REGISTER_CLIENT','8758041931000128', '注册机4号', '00:E2:DC:00:01:28','',''),
+('REGISTER_CLIENT','8758041931000130', '注册机5号', '00:E2:DC:00:01:30','',''),
+('REGISTER_CLIENT','8758051929000118', '注册机6号', '00:E2:DC:00:01:18','',''),
+('REGISTER_CLIENT','8456041931000132', '注册机7号', '00:E2:DC:00:01:32','',''),
+('REGISTER_CLIENT','8051011925000094', '注册机8号', '00:E2:DC:00:00:94','',''),
+('REGISTER_CLIENT','8051011925000096', '注册机9号', '00:E2:DC:00:00:96','',''),
+('REGISTER_CLIENT','8051041926000106', '注册机10号', '00:E2:DC:00:01:06','',''),
+('REGISTER_CLIENT','8051011922000064', '注册机11号', '00:E2:DC:00:00:64','',''),
+('REGISTER_CLIENT','8657041928000110', '注册机12号', '00:E2:DC:00:01:10','',''),
+('REGISTER_CLIENT','805101902000009 ', '注册机13号', '00:E2:DC:00:00:09','',''),
+('REGISTER_CLIENT','805101914000054 ', '注册机14号', '00:E2:DC:00:00:54','',''),
+('REGISTER_CLIENT','8456041932000134', '注册机15号', '00:E2:DC:00:01:34','',''),
+('REGISTER_CLIENT','8051041926000109', '注册机16号', '00:E2:DC:00:01:09','',''),
+('REGISTER_CLIENT','805101914000055 ', '注册机17号', '00:E2:DC:00:00:55','',''),
+('REGISTER_CLIENT','805101902000019 ', '注册机18号', '00:E2:DC:00:00:19','',''),
+('REGISTER_CLIENT','8456041931000133', '注册机19号', '00:E2:DC:00:01:33','',''),
+
+
+# MySQL server has gone away 解决办法
+登录mysql, 修改最大值，退出mysql生效
+set global max_allowed_packet = 10*1024*1024; 
+show VARIABLES like '%max_allowed_packet%';
+
+
+基于gtid的主，从同步设置
+
+主：
+mysqldump -uroot -p --all-databases --lock-all-tables > ~/master_db.sql
+
+进入数据库：
+GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' identified by 'slave@me1ux';
+FLUSH PRIVILEGES;
+SHOW MASTER STATUS;
+
+
+从:
+mysql -uroot -p -e 'reset master'
+mysql -uroot -p < ~/master_db.sql
+
+CHANGE MASTER TO MASTER_HOST='192.168.0.201',MASTER_USER='repl',MASTER_PASSWORD='repl@me1ux',MASTER_AUTO_POSITION=1;
+
+
+萝岗食堂导出数据库
+mysqldump -uroot -p cafeteria_repl --events --routines --triggers --complete-insert --ignore-table=cafeteria_repl.authentication_handminutiae --ignore-table=cafeteria_repl.authentication_faceminutiae > mysql.sql
+
+mysql -uroot -proot@me1ux -e "reset master"
+mysql -uroot -proot@me1ux cafeteria_repl < ~/mysql.sql
+
+
+mysql -uroot -p -D demo -e "insert device_device (type,number,name,mac,remark,status) values('','8153021923000091 ', '', '','','')"
+mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000201 ', 'Test1', '','','')"
+mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000202 ', 'Test1', '','','')"
+mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','975J042001000200 ', 'Test1', '','','')"
+
+
+
+update authentication_device set device_number = '805101902000020 ' where device_number = 'A002';
+update authentication_device set device_number = '8758051929000116' where device_number = 'A008';
+update authentication_device set device_number = '805101912000040 ' where device_number = 'A007';
+update authentication_device set device_number = '805101902000018 ' where device_number = 'A006';
+update authentication_device set device_number = '805101912000039 ' where device_number = 'B010';
+update authentication_device set device_number = '8051011922000058' where device_number = 'A009';
+
+
+更新步骤：
+update authentication_device set device_number = '805101902000020 ' where device_number = 'A002';
+update authentication_device set device_number = '8758051929000116' where device_number = 'A008';
+update authentication_device set device_number = '805101912000040 ' where device_number = 'A007';
+update authentication_device set device_number = '805101902000018 ' where device_number = 'A006';
+update authentication_device set device_number = '805101912000039 ' where device_number = 'B010';
+update authentication_device set device_number = '8051011922000058' where device_number = 'A009';
+
+mysqldump -uroot -p cafeteria_repl --events --routines --triggers --complete-insert --ignore-table=cafeteria_repl.authentication_handminutiae --ignore-table=cafeteria_repl.authentication_faceminutiae > mysql.sql
+
+echo "melux@#GZLGzf!" | sudo mkdir /home/palmx/1121/
+
+sudo mv /home/palmx/1121/ /home/melux/projects/cafeteria_repl_migration/
+sudo chown melux:melux /home/melux/projects/cafeteria_repl_migration/* -R
+cd /home/melux/projects/cafeteria_repl_migration/1121
+
+python3 deploy.py -s 'melux:melux@#GZLGzf!@10.225.0.202' -t code -cr master -p cafeteria_repl_KAI_YUE.tar.gz
+python3 deploy.py -s 'melux:melux@#GZLGzf!@10.225.1.117' -t code -cr slave -p cafeteria_repl_KAI_DA.tar.gz
+python3 deploy.py -s 'melux:melux#Gzjyz$@10.225.1.218' -t code -cr slave -p cafeteria_repl_JIA_YA_ZHAN.tar.gz
+python3 deploy.py -s 'melux:melux@#gzZSC&&@10.225.1.228' -t code -cr slave -p cafeteria_repl_ZHI_SHI_CHENG.tar.gz
+python3 deploy.py -s 'melux:GZgkstmelux!@10.225.2.187' -t code -cr slave -p cafeteria_repl_GUANG_KEN.tar.gz
+
+update org_cafeteriasettings set meal_status = 'ON'
+
+Requires=elasticsearch.service
+
+2020-02-03 删除3238的一条晚餐消费记录，有疑问的记录
++---------+--------------------+----------------+--------+----------------------------+---------------+--------------+--------+---------+-----------------+-------------------+-----------+--------+
+| id      | trade_no           | type           | method | time                       | payment       | out_trade_no | amount | balance | trader_staff_id | operator_staff_id | device_id | remark |
++---------+--------------------+----------------+--------+----------------------------+---------------+--------------+--------+---------+-----------------+-------------------+-----------+--------+
+| 1103078 | 157692257374003832 | CONSUME_DINNER |        | 2019-12-21 10:02:53.000000 | LOCAL_ACCOUNT |              |    500 |    8100 |            3832 |                 0 | 36        |        |
++---------+--------------------+----------------+--------+----------------------------+---------------+--------------+--------+---------+-----------------+-------------------+-----------+--------+
+
+
+# 删除binlog
+PURGE MASTER LOGS BEFORE '2020-02-18 00:00:00'
+
+user_info_query:{'name__contains':'xxx', 'id_number__contains':'xxx'}
+id_card_query:{'name__contains':'xxx', 'id_number__contains':'xxx'}
+
+
+# 高德测试机
+mysql -uroot -proot@me1ux -D police_gzhp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','825201902000038 ', '高德测试', '','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','955G011946000152', '厦门地铁模组1', '','','')"
+mysql -uroot -proot@me1ux -D police_gzhp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','805101902000022 ', '励弘测试机', '','','')"
+
+
+{'appid': '1cd41d5a18', 'id': 1}
+
+# 查看核数
+echo $(nproc)
+
+
+# ubuntu ssr
+wget -N --no-check-certificate https://raw.githubusercontent.com/luvvien/ssr-install-shellscript/master/ssr.sh && chmod +x ssr.sh && bash ssr.sh
+
+#锐速加速,自动重启
+wget xiaofd.github.io/ruisu.sh && bash ruisu.sh
+
+
+# 测速脚本
+wget -qO- bench.sh | bash
+
+
+# showdoc自动生成api接口
+wget https://www.showdoc.cc/script/showdoc_api.sh
+chmod +x showdoc_api.sh
+./showdoc_api.sh
+
+./showdoc_api.sh /myapp/demo/ 可以指定项目
+
+"""
+    /**
+    * showdoc
+    * @catalog 测试文档/用户相关
+    * @title 用户登录
+    * @description 用户登录的接口
+    * @method get
+    * @url https://www.showdoc.cc/home/user/login
+    * @header token 可选 string 设备token
+    * @param page 可选 string 页码，默认1，获取全部（all）
+    * @param limit 可选 int 分页大小，默认10
+    * @param username 必选 string 用户名
+    * @param password 必选 string 密码
+    * @param name 可选 string 用户昵称
+    * @return {"code":200,"msg","data":{"uid":"1","username":"12154545","name":"吴系挂","groupid":2,"reg_time":"1436864169","last_login_time":"0"}}
+    * @return_param groupid int 用户组id
+    * @return_param name string 用户昵称
+    * @remark 这里是备注信息
+    * @number 99
+    */
+"""
+
+
+sudo apt-mark hold linux-image-generic linux-headers-generic
+sudo systemctl kill --kill-who=all apt-daily.service
+sudo systemctl stop apt-daily.timer
+sudo systemctl disable apt-daily.timer
+sudo systemctl stop apt-daily.service
+sudo systemctl disable apt-daily.service
+sudo systemctl mask apt-daily.service
+sudo systemctl stop apt-daily-upgrade.timer
+sudo systemctl disable apt-daily-upgrade.timer
+sudo systemctl stop apt-daily-upgrade.service
+sudo systemctl disable apt-daily-upgrade.service
+sudo systemctl mask apt-daily-upgrade.service
+sudo systemctl daemon-reload
+sudo apt-get remove unattended-upgrades
+
+
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','975J042011000208', '普天嵌入式模组1号', '00:E2:DC:00:02:08','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','975J042011000209', '普天嵌入式模组2号', '00:E2:DC:00:02:09','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','975J042011000210', '普天嵌入式模组3号', '00:E2:DC:00:02:10','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','975J042011000211', '普天嵌入式模组4号', '00:E2:DC:00:02:11','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','975J042011000212', '普天嵌入式模组5号', '00:E2:DC:00:02:12','','')"
+mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','885A011929000124', '高德', '','','')"
+mysql -uroot -proot@me1ux -D demo -e "insert device_device (type,number,name,mac,remark,status) values('ALL','8153021923000086', '演示机', '','','')"
+
+
+select new.id, id from user_ext_userhistory where user_id = new.user_id and new.time >= user_ext_userhistory.start_date and (user_ext_userhistory.end_date is Null or new.time <= user_ext_userhistory.end_date) limit 0,1;
+
+1147777,1160503,1160509,1160515,1160521,1160527,1160533,1160539,1160545,1160551,1160557,1193137
+
+
+sudo kill -s 9 `pgrep xxx`
+
+def func_time(func):
+    def inner(*args, **kw):
+        import time
+        start_time = time.time()
+        result = func(*args, **kw)
+        end_time = time.time()
+        print('函数%s运行时间为：%s秒' % (func.__name__, round(end_time-start_time, 4)))
+        return result
+    return inner
+
+
+终端走主机ssr网络
+git clone https://github.com/rofl0r/proxychains-ng.git
+cd proxychains-ng
+./configure
+make && make install
+sudo scp src/proxychains.conf /usr/local/etc/proxychains.conf
+
+sudo vim /usr/local/etc/proxychains.conf
+[ProxyList]
+# add proxy here ...
+# meanwile
+# defaults set to "tor"
+# socks4     127.0.0.1 9050
+socks5 127.0.0.1 1080 #这里设置自己的代理地址和端口
+#一般都是1080
+
+使用 proxychains4
+proxychains4 curl www.baidu.com
+
+
+14:15:30 18723
+
+御剑诀
+吾知见道
+灰眼
+大道之剑
+江湖急救
