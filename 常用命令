@@ -383,7 +383,7 @@ print('finish');
 
 
 insert device_device (type,number,name,mac,remark,status) values
-('REGISTER_CLIENT','946F011946000151 ', '注册机1号', '00:E2:DC:00:00:22','',''),
+('REGISTER_CLIENT','D001 ', '注册机1号', '00:E2:DC:00:00:22','',''),
 ('REGISTER_CLIENT','805101902000023 ', '注册机2号', '00:E2:DC:00:00:23','',''),
 ('REGISTER_CLIENT','8758041931000129', '注册机3号', '00:E2:DC:00:01:29','',''),
 ('REGISTER_CLIENT','8758041931000128', '注册机4号', '00:E2:DC:00:01:28','',''),
@@ -435,7 +435,7 @@ mysql -uroot -proot@me1ux -e "reset master"
 mysql -uroot -proot@me1ux cafeteria_repl < ~/mysql.sql
 
 
-mysql -uroot -p -D demo -e "insert device_device (type,number,name,mac,remark,status) values('','8153021923000091 ', '', '','','')"
+mysql -uroot -p -D demo -e "insert device_device (type,number,name,mac,remark,status) values('ALL','1122334455667788', '一体机', '','','')"
 mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000201 ', 'Test1', '','','')"
 mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000202 ', 'Test1', '','','')"
 mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','975J042001000200 ', 'Test1', '','','')"
@@ -494,7 +494,8 @@ id_card_query:{'name__contains':'xxx', 'id_number__contains':'xxx'}
 # 高德测试机
 mysql -uroot -proot@me1ux -D police_gzhp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','825201902000038 ', '高德测试', '','','')"
 mysql -uroot -proot@me1ux -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','955G011946000152', '厦门地铁模组1', '','','')"
-mysql -uroot -proot@me1ux -D police_gzhp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','805101902000022 ', '励弘测试机', '','','')"
+mysql -uroot -proot@me1ux -D demo -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','805101914000053 ', '测试1', '','','')"
+mysql -uroot -proot@me1ux -D demo -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','805101902000023 ', '测试2', '','','')"
 
 
 {'appid': '1cd41d5a18', 'id': 1}
@@ -607,10 +608,21 @@ socks5 127.0.0.1 1080 #这里设置自己的代理地址和端口
 proxychains4 curl www.baidu.com
 
 
-14:15:30 18723
+食堂导数据到本地
+#202
+mysqldump -uroot -p cafeteria_repl --events --routines --triggers --complete-insert --ignore-table=cafeteria_repl.authentication_handminutiae --ignore-table=cafeteria_repl.authentication_faceminutiae > 202-cafe.sql
 
-御剑诀
-吾知见道
-灰眼
-大道之剑
-江湖急救
+python3 -m zipfile -c 202-cafe.zip 202-cafe.sql
+
+rm 202-cafe.sql
+
+sz 202-cafe.zip
+
+
+# 213
+rm 202-cafe.sql
+unzip 202-cafe.zip
+
+mysql -uroot -proot@me1ux -e "reset master"
+mysql -uroot -proot@me1ux cafeteria_repl < 202-cafe.sql
+
