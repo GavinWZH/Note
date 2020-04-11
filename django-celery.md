@@ -24,10 +24,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mbp.settings')
 
 app = Celery('mbp')
 
-app.config_from_object('django.conf:settings', namespace='CELERY')
+#app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object('django.conf:settings')
 
 # 自动发现所有任务
-app.autodiscover_tasks()
+app.autodiscover_tasks(['authentication_info'])
 
 # 允许root 用户运行celery
 platforms.C_FORCE_ROOT = True
