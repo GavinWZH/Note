@@ -299,7 +299,6 @@ def jiami():
     data = 'appid=78ba28bf6a&external_account_id=18850260579&timestamp=1583311821&key=cd66105e4238144cae26b4d94c13a4a8'
     key = 'cd66105e4238144cae26b4d94c13a4a8'
 
-
     def hmac1(key, data):
         print('-------------------hamc1')
         import binascii
@@ -313,7 +312,6 @@ def jiami():
         h.update(data)
 
         digest = h.finalize()
-
 
         hex_digest = binascii.hexlify(digest)
 
@@ -366,7 +364,7 @@ def subway():
         sorted_data = sorted(data.items(), key=lambda items: items[0])
 
         # join
-        joined_data = '&'.join([item[0] + '=' + str(item[1]) for item in sorted_data if item[0] != 'sign' and item[1] != '' and item[1] != None])
+        joined_data = '&'.join([item[0] + '=' + str(item[1]) for item in sorted_data if item[0] != 'sign' and item[1] != '' and item[1] is not None])
         joined_data = joined_data + "&key=" + key
 
         # sign
@@ -435,6 +433,91 @@ def subway():
             # print('error:%s' % error)
 
 
+def cafe_test():
+    import requests
+    import time
+
+    server_host = '10.0.0.213:8006'
+
+    test_datas = [
+        # {'name': '消费人员明细', 'url': 'http://%s/account/get_consume_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'category_id': 1, 'department_id': 3, 'device_id': 26}, 'method': 'POST'},
+        # {'name': '消费分餐', 'url': 'http://%s/account/get_consume_statistic/' % server_host, 'data': {'page': 1, 'limit': 10, 'excel_group_by': 'group_by_device', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'device_id': 26, 'group_by': 'day'}, 'method': 'POST'},
+        # {'name': '消费汇总', 'url': 'http://%s/account/get_consume_statistic/' % server_host, 'data': {'page': 1, 'limit': 10, 'excel_group_by': 'group_by_cafeteria', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'group_by': 'day'}, 'method': 'POST'},
+        # {'name': '充值新增明细', 'url': 'http://%s/account/get_refund_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'type': 'TOP_UP', 'first_top_up': 'True', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'department_id': 673, 'category_id': 1, 'method': 'CASH', 'user_id': '10'}, 'method': 'POST'},
+        # {'name': '充值明细', 'url': 'http://%s/account/get_refund_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'type': 'TOP_UP', 'first_top_up': 'False', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'department_id': 673, 'category_id': 1, 'method': 'CASH', 'user_id': '10'}, 'method': 'POST'},
+        # {'name': '补贴详情', 'url': 'http://%s/account/get_staff_subsity_detail/?page=1&limit=10&start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&category_id=&department_id=&is_new_join=' % server_host, 'method': 'GET'},
+        # {'name': '打印补贴', 'url': 'http://%s/account/export_staff_subsity_detail/?start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&category_id=&department_id=&is_new_join=&file_type=pdf&author=admin&sign=cHJpbnRlcg==,cHJpbnRlckBnemxnc3Q=' % server_host, 'method': 'GET'},
+        {'name': '打印消费详情记录', 'url': 'http://%s/account/export_consume_detail/?start_date=2020-01-01 00:00:00&end_date=2020-01-31 23:59:59&cafeteria_name=&category_id=&department_id=&device_id=&file_type=pdf&author=admin&sign=cHJpbnRlcg==,cHJpbnRlckBnemxnc3Q=' % server_host, 'method': 'GET'},
+
+    ]
+
+    session = requests.session()
+
+    session.post(url='http://%s/user/login/' % server_host, data={'username': 'admin', 'password': 'admin'})
+
+    for test_data in test_datas:
+        now = time.time()
+        test_num = 1
+        if test_data['method'] == 'GET':
+            for i in range(test_num):
+                session.get(url=test_data['url'])
+        else:
+            for i in range(test_num):
+                session.post(url=test_data['url'], data=test_data['data'])
+        print('%s:%ss, 食堂服务器预计时间:%s' % (test_data['name'], round((time.time() - now) / test_num, 3), round((time.time() - now) / test_num / 3 * 2, 3)))
+
+
+def func_time(func):
+    def inner(*args, **kw):
+        import time
+        start_time = time.time()
+        result = func(*args, **kw)
+        end_time = time.time()
+        print('函数%s运行时间为：%s秒' % (func.__name__, round(end_time - start_time, 4)))
+        return result
+    return inner
+
+
+def quick_sort(alist, start, end):
+    """快速排序"""
+
+    # 递归的退出条件
+    if start >= end:
+        return
+
+    # 设定起始元素为要寻找位置的基准元素
+    mid = alist[start]
+
+    # low为序列左边的由左向右移动的游标
+    low = start
+
+    # high为序列右边的由右向左移动的游标
+    high = end
+
+    while low < high:
+        # 如果low与high未重合，high指向的元素不比基准元素小，则high向左移动
+        while low < high and alist[high] >= mid:
+            high -= 1
+        # 将high指向的元素放到low的位置上
+        alist[low] = alist[high]
+
+        # 如果low与high未重合，low指向的元素比基准元素小，则low向右移动
+        while low < high and alist[low] < mid:
+            low += 1
+        # 将low指向的元素放到high的位置上
+        alist[high] = alist[low]
+
+    # 退出循环后，low与high重合，此时所指位置为基准元素的正确位置
+    # 将基准元素放到该位置
+    alist[low] = mid
+
+    # 对基准元素左边的子序列进行快速排序
+    quick_sort(alist, start, low - 1)
+
+    # 对基准元素右边的子序列进行快速排序
+    quick_sort(alist, low + 1, end)
+
+
 def main():
     ...
     # get_random_name()
@@ -466,9 +549,8 @@ def main():
     # jiami()
 
     # subway()
-    a = [{'a':1},{'a':2}]
-    print()
 
+    # cafe_test()
 
 
 if __name__ == '__main__':

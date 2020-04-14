@@ -625,7 +625,8 @@ sz 202-cafe.zip
 
 
 # 213
-rm 202-cafe.sql
+rm 202*
+rz
 unzip 202-cafe.zip
 
 mysql -uroot -proot@me1ux -e "reset master"
@@ -646,37 +647,11 @@ rm demo.tar.gz
 mysql -uroot -proot@me1ux -D demo -e "insert device_device (type,number,name,mac,remark,status) values('ALL','8153021923000086', '演示机', '','','')"
 
 
-
-SELECT
-    at.id AS trade_id,
-    ssh.id AS staff_history_id,
-    ssch.id AS staff_category_histroy_id
-FROM account_transaction AS at
-JOIN staff_staffhistory AS ssh
-ON
-        at.trader_staff_id = ssh.staff_id
-    AND
-        at.time >= ssh.start_date
-    AND
-        (
-                ssh.end_date is NULL
-            OR
-                DATE_FORMAT(at.time, '%Y-%m-01 00:00:00.000000') <= ssh.end_date
-        )
-JOIN staff_staffcategoryhistory AS ssch
-ON
-        at.trader_staff_id = ssch.staff_id
-    AND
-        at.time >= ssch.start_date
-    AND
-        (
-                ssch.end_date is NULL
-            OR
-                DATE_FORMAT(at.time, '%Y-%m-01 00:00:00.000000') <= ssch.end_date
-        )
-WHERE
-    at.trader_staff_id=214
-ORDER BY at.id;
-
-
 sudo apt install -y cmake curl python3-dev python3-pip libssl-dev libmysqlclient-dev git curl gnupg2 ca-certificates lsb-release build-essential autoconf libtool pkg-config subversion git build-essential gtk+-2.0 gstreamer1.0-plugins-base libv4l-dev libdc1394-22 libavcodec-dev libswscale-dev libavformat-dev libjasper-dev
+
+
+mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('REGISTER_CLIENT','8758051929000115', '注册机', '','','')"
+mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','905C021945000147', '模组1', '00:E2:DC:00:01:47','','')"
+mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','905C021945000148', '模组2', '00:E2:DC:00:01:48','','')"
+mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','915S021945000149', '模组3', '00:E2:DC:00:01:49','','')"
+mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','915S021945000150', '模组4', '00:E2:DC:00:01:50','','')"
