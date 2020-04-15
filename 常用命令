@@ -623,14 +623,17 @@ rm 202-cafe.sql
 
 sz 202-cafe.zip
 
+rm 202-cafe.zip
+
 
 # 213
-rm 202*
+
 rz
 unzip 202-cafe.zip
 
 mysql -uroot -proot@me1ux -e "reset master"
 mysql -uroot -proot@me1ux cafeteria_repl < 202-cafe.sql
+rm 202*
 
 
 
