@@ -276,27 +276,60 @@ def airwave_log():
 def game():
     import re
     import json
+    import ast
+    import chardet
     import requests
     # with open('data.json', 'r', encoding='utf-8') as f:
     #     datas = json.load(f)
     # print(datas.keys())
     # print(datas.get('equipskillconfig'))
 
-    res = requests.get('http://www.guajigame.com/_qingbian/js/data/gamedata.js')
-    content = res.text
-    content = content.replace('\n', '')
-    content = content.replace("'", '"')
-    content = content.replace(",},}", '}}')
-    content = '{%s}' % content
-    # for key in keys:
-    #     content = content.replace('var %s =' % key, "%s: " % key)
-    # print(eval(content))
+    # res = requests.get('http://www.guajigame.com/_qingbian/js/data/gamedata.js')
+    # res = requests.get('http://wdhtiger.com/_qingbian//js/data/gamedata.js')
+    # content = res.text
+    # with open('gamedata.js', 'w', encoding='utf-8') as f:
+    #     f.write(res.text)
+    # content = res.text
+
+    with open('gamedata.js', 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    content = content.replace('\n', '').replace('\'', '')
+    js_content = content.split('var')
+    js_content = filter(None, js_content)
+    datas = {}
+    for index, value in enumerate(js_content):
+        value = value.replace(' ', '')
+        value = value.split('=')
+        title = value[0]
+        data = value[1]
+        data = ast.literal_eval(data)
+        datas[title] = data
+
+    js_datas = {}
+    for key, values in datas.items():
+        for k, value in values.items():
+            name = value['NAME']
+            if key not in js_datas:
+                js_datas[key] = [name]
+            else:
+                js_datas[key].append(name)
+
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(js_datas, f, ensure_ascii=False, indent=4)
+
+    # print(content)
+
+    # datas = {}
+    # monstertable = []
+    # for k, v in datas.items():
+    #     monstertable.append(v['NAME'])
 
 
 def jiami():
 
     data = 'appid=78ba28bf6a&external_account_id=18850260579&status=0&timestamp=1583310929&key=cd66105e4238144cae26b4d94c13a4a8'
-    data = 'appid=78ba28bf6a&external_account_id=18850260579&timestamp=1583311821&key=cd66105e4238144cae26b4d94c13a4a8'
+    data = 'appid=486acfd497&external_account_id=123456&timestamp=1583311821&key=1b1ee0f1f5441446980a601c2e568366'
     key = 'cd66105e4238144cae26b4d94c13a4a8'
 
     def hmac1(key, data):
@@ -375,13 +408,13 @@ def subway():
     import requests
     import time
 
-    key = '1be8ac025a3301ee102a4aab737f9e37'
-    appid = '3a58a16e4d'
+    key = '1b1ee0f1f5441446980a601c2e568366'
+    appid = '486acfd497'
     datas = [
-        {'url': 'http://192.168.0.201:8015/record/query/', 'method': 'get', 'data': {'record_id': '1', 'key': key, 'appid': appid, 'timestamp': int(time.time()) + 0}},
-        {'url': 'http://192.168.0.201:8015/user/query/', 'method': 'get', 'data': {'external_account_id': 'hcaabtba', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
-        {'url': 'http://192.168.0.201:8015/user/update/', 'method': 'post', 'data': {'external_account_id': 'hcaabtba', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
-        {'url': 'http://192.168.0.201:8015/user/delete/', 'method': 'post', 'data': {'external_account_id': 'hcaabtba', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
+        {'url': 'http://10.0.0.221:8015/record/query/', 'method': 'get', 'data': {'record_id': '1', 'key': key, 'appid': appid, 'timestamp': int(time.time()) + 0}},
+        {'url': 'http://10.0.0.221:8015/user/query/', 'method': 'get', 'data': {'external_account_id': '123', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
+        {'url': 'http://10.0.0.221:8015/user/update/', 'method': 'post', 'data': {'external_account_id': '123', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
+        {'url': 'http://10.0.0.221:8015/user/delete/', 'method': 'post', 'data': {'external_account_id': '123', 'key': key, 'appid': appid, 'timestamp': int(time.time()) - 0}},
     ]
     with open('test.log', 'w', encoding='utf-8') as f:
         for data in datas:
@@ -437,33 +470,69 @@ def cafe_test():
     import requests
     import time
 
-    server_host = '10.0.0.213:8006'
+    server_host = '192.168.0.201:8022'
 
     test_datas = [
-        # {'name': '消费人员明细', 'url': 'http://%s/account/get_consume_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'category_id': 1, 'department_id': 3, 'device_id': 26}, 'method': 'POST'},
+        # {'name': '消费人员明细', 'url': 'http://%s/account/get_consume_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-16 23:59:59', 'cafeteria_name': '凯月楼', 'category_id': 1, 'department_id': 3, 'device_id': 26}, 'method': 'POST'},
         # {'name': '消费分餐', 'url': 'http://%s/account/get_consume_statistic/' % server_host, 'data': {'page': 1, 'limit': 10, 'excel_group_by': 'group_by_device', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'device_id': 26, 'group_by': 'day'}, 'method': 'POST'},
         # {'name': '消费汇总', 'url': 'http://%s/account/get_consume_statistic/' % server_host, 'data': {'page': 1, 'limit': 10, 'excel_group_by': 'group_by_cafeteria', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'group_by': 'day'}, 'method': 'POST'},
         # {'name': '充值新增明细', 'url': 'http://%s/account/get_refund_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'type': 'TOP_UP', 'first_top_up': 'True', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'department_id': 673, 'category_id': 1, 'method': 'CASH', 'user_id': '10'}, 'method': 'POST'},
         # {'name': '充值明细', 'url': 'http://%s/account/get_refund_detail/' % server_host, 'data': {'page': 1, 'limit': 10, 'type': 'TOP_UP', 'first_top_up': 'False', 'start_month': '2020-04', 'end_month': '2020-04', 'start_date': '2020-03-01 00:00:00', 'end_date': '2020-04-13 23:59:59', 'cafeteria_name': '凯月楼', 'department_id': 673, 'category_id': 1, 'method': 'CASH', 'user_id': '10'}, 'method': 'POST'},
         # {'name': '补贴详情', 'url': 'http://%s/account/get_staff_subsity_detail/?page=1&limit=10&start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&category_id=&department_id=&is_new_join=' % server_host, 'method': 'GET'},
         # {'name': '打印补贴', 'url': 'http://%s/account/export_staff_subsity_detail/?start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&category_id=&department_id=&is_new_join=&file_type=pdf&author=admin&sign=cHJpbnRlcg==,cHJpbnRlckBnemxnc3Q=' % server_host, 'method': 'GET'},
-        {'name': '打印消费详情记录', 'url': 'http://%s/account/export_consume_detail/?start_date=2020-01-01 00:00:00&end_date=2020-01-31 23:59:59&cafeteria_name=&category_id=&department_id=&device_id=&file_type=pdf&author=admin&sign=cHJpbnRlcg==,cHJpbnRlckBnemxnc3Q=' % server_host, 'method': 'GET'},
+        # {'name': '打印消费详情记录', 'url': 'http://%s/account/export_consume_detail/?start_date=2020-01-01 00:00:00&end_date=2020-01-31 23:59:59&cafeteria_name=&category_id=&department_id=&device_id=&file_type=pdf&author=admin&sign=cHJpbnRlcg==,cHJpbnRlckBnemxnc3Q=' % server_host, 'method': 'GET'},
+        # {'name': '补贴详情', 'url': 'http://%s/account/get_staff_subsity_detail/?page=1&limit=10&start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&category_id=2&department_id=&is_new_join=' % server_host, 'method': 'GET'},
+        # {'name': '部门补贴', 'url': 'http://%s/account/get_staff_subsity_statistic/?page=1&limit=10&start_date=2020-04-01 00:00:00&end_date=2020-04-30 23:59:59&department_id=&category_id=' % server_host, 'method': 'GET'},
+        # {'name': '查看日志', 'url': 'http://%s/user/get_logs/' % server_host, 'method': 'GET'},
+        # {'name': '创建角色', 'url': 'http://%s/user/create_role/' % server_host, 'data': {'alias': '111', 'permission_ids': ''}, 'method': 'POST'},
+        # {'name': '修改角色', 'url': 'http://%s/user/create_role/' % server_host, 'data': {'alias': '456', 'permission_ids': '', 'role_id': 37}, 'method': 'POST'},
+        # {'name': '查看角色', 'url': 'http://%s/user/get_role/' % server_host, 'data': {'role_id': 31}, 'method': 'POST'},
+        # {'name': '查看角色列表', 'url': 'http://%s/user/get_roles/' % server_host, 'method': 'GET'},
+        # {'name': '查看系统账号', 'url': 'http://%s/user/get_user/?user_id=1' % server_host, 'method': 'GET'},
+        # {'name': '查看系统账号列表', 'url': 'http://%s/user/get_users/' % server_host, 'method': 'GET'},
+        # {'name': '添加系统管理账号', 'url': 'http://%s/user/create_user/' % server_host, 'method': 'GET'},
+        # {'name': '修改系统账号信息', 'url': 'http://%s/user/update_user/' % server_host, 'method': 'GET'},
+        # {'name': '删除系统账号', 'url': 'http://%s/user/delete_user/' % server_host, 'method': 'GET'},
+        # {'name': '修改系统账号的角色', 'url': 'http://%s/user/update_user_role/' % server_host, 'method': 'GET'},
+        # {'name': '查看设备列表', 'url': 'http://%s/authentication/get_devices/' % server_host, 'method': 'GET'},
+        # {'name': '修改设备信息', 'url': 'http://%s/authentication/update_device/' % server_host, 'method': 'GET'},
+        # {'name': '删除手掌', 'url': 'http://%s/staff/delete_hand/' % server_host, 'data': {}, 'method': 'POST'},
+        # {'name': '激活', 'url': 'http://%s/staff/update_staff/' % server_host, 'data': {'staff_id': 649, 'status': 'ENABLED'}, 'method': 'POST'},
+        # {'name': '增加单位', 'url': 'http://%s/org/create_department/' % server_host, 'data': {}, 'method': 'POST'},
+        # {'name': '修改单位', 'url': 'http://%s/org/update_department/' % server_host, 'data': {}, 'method': 'POST'},
+        # {'name': '删除单位', 'url': 'http://%s/org/delete_department/' % server_host, 'data': {}, 'method': 'POST'},
+        # {'name': '查询人员补贴设置', 'url': 'http://%s/account/get_staff_subsidy_settings/' % server_host, 'data': {}, 'method': 'GET'},
+        # {'name': '创建人员补贴设置', 'url': 'http://%s/account/create_staff_subsidy_settings/' % server_host, 'data': {'staff_id': 3917, 'status': 'DISABLED', 'start_date': '2019-12-01 00:00:00', 'end_date': '2020-05-31 23:59:59'}, 'method': 'POST'},
+        # {'name': '更新人员补贴设置', 'url': 'http://%s/account/update_staff_subsidy_settings/' % server_host, 'data': {'id': 2, 'staff_id': 80, 'status': 'DISABLED', 'start_date': '2020-01-01 00:00:00', 'end_date': '2020-02-01 00:00:00'}, 'method': 'POST'},
+        # {'name': '删除人员补贴设置', 'url': 'http://%s/account/delete_staff_subsidy_settings/' % server_host, 'data': {'id': 1}, 'method': 'POST'},
+        {'name': '查看设置', 'url': 'http://%s/user_info/get_user_default_role_settings/' % server_host, 'data': {}, 'method': 'GET'},
+        {'name': '修改设置', 'url': 'http://%s/user_info/update_user_default_role_settings/' % server_host, 'data': {'user_default_role_setting_id': 1, 'role_ids': '1,2'}, 'method': 'POST'},
 
     ]
 
     session = requests.session()
 
-    session.post(url='http://%s/user/login/' % server_host, data={'username': 'admin', 'password': 'admin'})
+    session.post(url='http://%s/administrator/login/' % server_host, data={'adminname': 'admin', 'password': 'admin'})
 
     for test_data in test_datas:
         now = time.time()
         test_num = 1
         if test_data['method'] == 'GET':
             for i in range(test_num):
-                session.get(url=test_data['url'])
+                res = session.get(url=test_data['url'])
+                if res.status_code != 200:
+                    print(res.text)
+                else:
+                    print(res.status_code)
+                    print(res.json())
         else:
             for i in range(test_num):
-                session.post(url=test_data['url'], data=test_data['data'])
+                res = session.post(url=test_data['url'], data=test_data['data'])
+                if res.status_code != 200:
+                    print(res.text)
+                else:
+                    print(res.status_code)
+                    print(res.json())
         print('%s:%ss, 食堂服务器预计时间:%s' % (test_data['name'], round((time.time() - now) / test_num, 3), round((time.time() - now) / test_num / 3 * 2, 3)))
 
 
@@ -550,7 +619,7 @@ def main():
 
     # subway()
 
-    # cafe_test()
+    cafe_test()
 
 
 if __name__ == '__main__':

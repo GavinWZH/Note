@@ -188,7 +188,7 @@ update user set plugin='mysql_native_password' where User='root';
 update user set authentication_string=password('root@me1ux') where user='root' and host='localhost';
 
 
-svn 
+svn
 wuzh
 wuzh@#2018
 
@@ -242,7 +242,7 @@ bin/kafka-server-start.sh config/server.properties &
 
 
 # 数据库创建用户
-grant select on *.* to 'test'@'%' identified by 'test';
+grant select on *.* to 'root'@'localhost' identified by 'root';
 flush privileges;
 select * from mysql.user\G
 
@@ -250,6 +250,11 @@ select * from mysql.user\G
 change master to master_host='192.168.33.8',master_user='repl',master_password='repl@me1ux',master_log_file='mysql-bin.000008',master_log_pos=194;
 start slave;
 show slave status\G
+
+
+# 数据库清理binlog
+PURGE MASTER LOGS BEFORE DATE_SUB(NOW(), INTERVAL %s DAY)
+PURGE MASTER LOGS BEFORE '2020-03-01 00:00:00'
 
 
 
@@ -342,7 +347,7 @@ void testFeatureExtracion();
 
 3、产生python模块
 c: swig -python feature_extraction.i
-c++: swig -c++ -python feature_extraction.i 
+c++: swig -c++ -python feature_extraction.i
 
 生成文件：xxx_wrap.cxx、xxx.py
 
@@ -375,7 +380,7 @@ curl -POST http://10.0.0.236:8008/user/update/ -d "id=&status=0"
 
 
 var device = Device.getMain();
-for (i = 0; i < 100; i++) { 
+for (i = 0; i < 100; i++) {
     device.click(1000,1150,sigmaConst.STATE_PRESS);
     delay(5000);
 };
@@ -406,7 +411,7 @@ insert device_device (type,number,name,mac,remark,status) values
 
 # MySQL server has gone away 解决办法
 登录mysql, 修改最大值，退出mysql生效
-set global max_allowed_packet = 10*1024*1024; 
+set global max_allowed_packet = 10*1024*1024;
 show VARIABLES like '%max_allowed_packet%';
 
 
@@ -435,11 +440,12 @@ mysql -uroot -proot@me1ux -e "reset master"
 mysql -uroot -proot@me1ux cafeteria_repl < ~/mysql.sql
 
 
-mysql -uroot -p -D demo -e "insert device_device (type,number,name,mac,remark,status) values('ALL','1122334455667788', '一体机', '','','')"
+mysql -uroot -p -D acs_qingdao -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','805101902000008 ', '门禁测试', '00:E2:DC:00:00:08','','')"
 mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000201 ', 'Test1', '','','')"
 mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','985K052002000202 ', 'Test1', '','','')"
-mysql -uroot -p -D subway_xiamen -e "insert device_device (type,number,name,mac,remark,status) values('ALL','975J042001000200 ', 'Test1', '','','')"
+mysql -uroot -p -D demo -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','815I041947000155', 'Test1', '','','')"
 
+mysql -uroot -p -D railway_gz -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','8758041931000128 ', '广铁集团一体机', '00:E2:DC:00:01:28','','')"
 
 
 update authentication_device set device_number = '805101902000020 ' where device_number = 'A002';
@@ -598,7 +604,7 @@ git clone https://github.com/rofl0r/proxychains-ng.git
 cd proxychains-ng
 ./configure
 make && make install
-sudo scp src/proxychains.conf /usr/local/etc/proxychains.conf
+scp src/proxychains.conf /usr/local/etc/proxychains.conf
 
 sudo vim /usr/local/etc/proxychains.conf
 [ProxyList]
@@ -606,11 +612,11 @@ sudo vim /usr/local/etc/proxychains.conf
 # meanwile
 # defaults set to "tor"
 # socks4     127.0.0.1 9050
-socks5 127.0.0.1 1080 #这里设置自己的代理地址和端口
+socks5 192.168.0.73 22222 #这里设置自己的代理地址和端口
 #一般都是1080
 
 使用 proxychains4
-proxychains4 curl www.baidu.com
+proxychains4 curl www.google.com
 
 
 食堂导数据到本地
@@ -633,6 +639,7 @@ unzip 202-cafe.zip
 
 mysql -uroot -proot@me1ux -e "reset master"
 mysql -uroot -proot@me1ux cafeteria_repl < 202-cafe.sql
+
 rm 202*
 
 
@@ -658,3 +665,78 @@ mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,
 mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','905C021945000148', '模组2', '00:E2:DC:00:01:48','','')"
 mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','915S021945000149', '模组3', '00:E2:DC:00:01:49','','')"
 mysql -uroot -proot@me1ux -D ccp -e "insert device_device (type,number,name,mac,remark,status) values('AUTH_CLIENT','915S021945000150', '模组4', '00:E2:DC:00:01:50','','')"
+
+
+python3 cafe.py -s 'melux:melux@127.0.0.1' 'melux:melux@#2018!@10.0.0.213' && bash ~/projects/start_all_projects_service.sh
+
+# 下载virtualbox.box
+https://www.jianshu.com/p/ccc382b2beed
+页面的地址+/providers/virtualbox.box
+
+
+https://app.vagrantup.com/generic/boxes/ubuntu2004/versions/3.0.2/providers/virtualbox.box
+
+
+DROP TRIGGER IF EXISTS user_info_insert_trigger;
+
+
+# 快速看文件夹大小
+du -h --max-depth=1
+du -h '文件夹' --max-depth=0
+
+
+https://app.vagrantup.com/geerlingguy/boxes/ubuntu2004/providers/virtualbox.box
+
+https://app.vagrantup.com/geerlingguy/boxes/ubuntu2004/versions/1.0.0/providers/virtualbox.box
+
+更新广垦食堂
+scp melux@10.225.0.202:/home/melux/200506.zip .
+mkdir update
+mv 200506.zip update
+python3 -m zipfile -e 200506.zip .
+cp -r /home/melux/projects/cafeteria_repl/web/ .
+cp -r /home/melux/projects/cafeteria_repl/frontend/ .
+cd 200506
+cp VERSION /home/melux/projects/cafeteria_repl/
+rm -r /home/melux/projects/cafeteria_repl/web/*/__pycache__
+rm -r /home/melux/projects/cafeteria_repl/web/*/__pycache__
+rm /home/melux/projects/cafeteria_repl/web/account/views.py
+rm /home/melux/projects/cafeteria_repl/web/authentication/views.py
+rm /home/melux/projects/cafeteria_repl/web/staff/views.py
+
+cp -r frontend /home/melux/projects/cafeteria_repl/
+cp -r web /home/melux/projects/cafeteria_repl/
+
+cd /home/melux/projects/cafeteria_repl/web/
+
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py init
+
+sudo systemctl restart web_server_cafeteria_repl.service
+
+
+
+
+# es修改日志和数据存放目录
+sudo -i
+systemctl stop elasticsearch
+mkdir -p /data/elasticsearch/datas/
+mkdir -p /data/elasticsearch/logs/
+chown -R elasticsearch:elasticsearch /data/elasticsearch
+
+vim /etc/elasticsearch/elasticsearch.yml
+
+修改数据文件存储位置:
+   默认位置: path.data: /var/lib/elasticsearch
+   修改为:   path.data: /data/elasticsearch/datas/
+修改日志文件存储位置:
+   默认位置: path.logs: /var/log/elasticsearch
+   修改为:   path.logs: /data/elasticsearch/logs/
+
+cp -r /var/lib/elasticsearch/* /data/elasticsearch/datas/
+cp -r /var/log/elasticsearch/* /data/elasticsearch/logs/
+
+chown -R elasticsearch:elasticsearch /data/elasticsearch/*
+
+systemctl start elasticsearch
